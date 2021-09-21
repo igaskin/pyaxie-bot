@@ -23,7 +23,8 @@ class pyaxie(object):
 		:param ronin_address: The ronin address
 		:param private_key: Private key belonging to the ronin account
 		"""
-		with open("secret.yaml", "r") as file:
+		config_file = os.getenv("CONFIG_FILE", "secret.yaml")
+		with open(config_file, "r") as file:
 			config = yaml.safe_load(file)
 
 		self.config = config
@@ -32,7 +33,9 @@ class pyaxie(object):
 		self.headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36', 'authorization': ""}
 		self.url = "https://axieinfinity.com/graphql-server-v2/graphql"
 		self.url_api = config['url_api']
-		self.access_token = self.get_access_token()
+		# TODO: uncomment this to add ronin write access
+		# should be optional if private key is not set
+		# self.access_token = self.get_access_token()
 		self.account_id = 0
 		self.email = ""
 		self.slp_contract = None
@@ -754,71 +757,6 @@ class pyaxie(object):
 			txns.append(str(self.transfer_slp(self.personal_ronin, scholar_payout_amount)))
 		return txns
 
-	def get_mint_burn_graph(self):
-		"""
-		Create a chart in /img with SLP burned/minted
-		:return: path of the image
-		"""
-		"""
-		try:
-			slp_supply = json.loads(requests.get("https://www.axieworld.com/api/charts/slp-issuance").content)
-			dates, mints, burns = ([],) * 3
-			today = date.today()
-			qc = QuickChart()
-			qc.width = 500
-			qc.height = 300
-			qc.device_pixel_ratio = 2.0
-
-			for i in range(0, 6):
-				dates.append(today) if i == 0 else dates.append(today - timedelta(days=i))
-				mints.append(round(slp_supply["data"]["minted"][-(i + 1)] / 1000000, 1))
-				burns.append(round(slp_supply["data"]["burned"][-(i + 1)] / 1000000, 1))
-
-			qc.config = {
-				"type": "bar",
-				"data": {
-					"labels": dates,
-					"datasets": [{
-						"label": 'Minted',
-						"backgroundColor": 'rgb(35, 90, 155)',
-						"stack": 'Stack 0',
-						"data": mints,
-					},
-						{
-							"label": 'Burned',
-							"backgroundColor": 'rgb(245, 158, 27)',
-							"stack": 'Stack 1',
-							"data": burns,
-						},
-					]
-				},
-				"options": {
-					"plugins": {
-						"datalabels": {
-							"anchor": 'end',
-							"align": 'top',
-							"color": '#fff',
-							"backgroundColor": 'rgba(54, 57, 63, 1.0)'
-						},
-					},
-					"title": {
-						"display": "true",
-						"text": "SLP minted vs burned (in millions)",
-					},
-					"tooltips": {
-						"mode": "index",
-						"intersect": "false",
-					},
-					"responsive": "true",
-				},
-			}
-			path = 'img/slpMintedVsBurned.png'
-			qc.to_file(path)
-		except ValueError as e:
-			return e
-		return path
-		"""
-		return
 
 	def get_breed_cost(self, nb=-1):
 		"""

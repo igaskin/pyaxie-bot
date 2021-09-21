@@ -1,0 +1,11 @@
+Dockerfile
+Containerfile
+README.md
+*.pyc
+*.pyo
+*.pyd
+secret.yaml
+__pycache__
+.pytest_cache
+.venv
+
