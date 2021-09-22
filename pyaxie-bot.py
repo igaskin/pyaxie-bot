@@ -116,8 +116,7 @@ async def on_message(message):
         config = yaml.safe_load(file)
 
         scholar = get_account_from_id(message.author.id)
-        # scholar = None
-        if scholar is None and False:
+        if scholar is None:
             print("\nNon scholar tried to use the bot : " + message.author.name + " : " + str(
                 message.author.id) + " at " + now.strftime("%d/%m/%Y %H:%M:%S"))
             return await message.channel.send(
@@ -131,12 +130,12 @@ async def on_message(message):
         # TODO: this needs to be translated
         await message.channel.send("\n\n**Commands for everybody :**\n" +
                                    "\n`$infos` = Send all the infos about your account  " +
-                                   "\n`$qr` = Send your QR code  " +
+                                   # "\n`$qr` = Send your QR code  " +
                                    "\n`$axies` = Send the list of axies of your account" +
                                    # TODO(igaskin) this second argument should be manager only
-                                   "\n`$axies 506011891353903121` = Send axies list of given discord ID" +
+                                   # "\n`$axies 506011891353903121` = Send axies list of given discord ID" +
                                    "\n`$profile` = Send the link of your Axie Infinity profile" +
-                                   "\n`$all_profile` = Send a link of every Axie account in the scholarship" +
+                                   # "\n`$all_profile` = Send a link of every Axie account in the scholarship" +
                                    "\n`$self_payout` = To claim and payout for yourself. Send to the personal address you gave to your manager.")
 
                                    # TODO(igaskin): hide this for managers only

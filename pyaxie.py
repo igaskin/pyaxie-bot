@@ -35,7 +35,8 @@ class pyaxie(object):
 		self.url_api = config['url_api']
 		# TODO: uncomment this to add ronin write access
 		# should be optional if private key is not set
-		# self.access_token = self.get_access_token()
+		# access tokens are good for a week, these should be cached
+		self.access_token = self.get_access_token()
 		self.account_id = 0
 		self.email = ""
 		self.slp_contract = None
@@ -745,13 +746,14 @@ class pyaxie(object):
 			return ["Error: Nothing to send.", "Error: Nothing to send."]
 
 		if self.payout_percentage == 0:
-			print("Sending all the {} SLP to you : {} ".format(academy_payout_amount, self.config['personal']['ronin_address']))
+			print("Sending all {} SLP to you : {} ".format(academy_payout_amount, self.config['personal']['ronin_address']))
 			txns.append(str(self.transfer_slp(self.config['personal']['ronin_address'], academy_payout_amount + scholar_payout_amount)))
 			txns.append("Nothing to send to scholar")
 			return txns
 		else:
-			print("Sending {} SLP to {} : {} ".format(academy_payout_amount, "You", self.config['personal']['ronin_address']))
-			txns.append(str(self.transfer_slp(self.config['personal']['ronin_address'], academy_payout_amount)))
+			# TODO(igaskin) change second field to guild name variable
+			print("Sending {} SLP to {} : {} ".format(academy_payout_amount, "Axie Amigos", self.config['personal']['ronin_address'].replace('ronin:', '0x')))
+			txns.append(str(self.transfer_slp(self.config['personal']['ronin_address'].replace('ronin:', '0x'), academy_payout_amount)))
 
 			print("Sending {} SLP to {} : {} ".format(scholar_payout_amount, self.name, self.personal_ronin))
 			txns.append(str(self.transfer_slp(self.personal_ronin, scholar_payout_amount)))
